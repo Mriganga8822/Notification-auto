@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Demo</title>
+</head>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;">
+  <button id="notifyBtn" style="padding:15px 25px;font-size:18px;border:none;border-radius:10px;background:#007bff;color:white;cursor:pointer;">
+    Click Me for Notification
+  </button>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    document.getElementById('notifyBtn').addEventListener('click', () => {
+      // Ask for notification permission
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          navigator.serviceWorker.getRegistration().then(reg => {
+            if (reg) {
+              reg.showNotification("Hiii 👋", {
+                body: "You just clicked the button!",
+                icon: "https://cdn-icons-png.flaticon.com/512/1782/1782765.png",
+                vibrate: [200, 100, 200]
+              });
+            }
+          });
+        } else {
+          alert("Please allow notifications to see them!");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
